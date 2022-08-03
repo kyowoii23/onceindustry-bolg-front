@@ -1,24 +1,26 @@
-import { useRouter } from "next/router";
+import {API_HOST} from '../../common';
 
-export const PostDetailPage = ({postId}) => {
-    console.log(postId)
+const PostDetailPage = ({postData}) => {
+  const {id, title, content} = postData;
 
-    return (
-        <div>
-            <h1>상세 페이지</h1>
-            <p>안녕</p>
-        </div>
-    )
-}
+  return (
+    <article id={id}>
+      <h1>{title}</h1>
+      <p>{content}</p>
+    </article>
+  );
+};
 
-export const getServerSideProps = async (context) => {
-    const {postId} = context.query;
+export const getServerSideProps = async context => {
+  const {postId} = context.query;
+  const response = await fetch(`${API_HOST}/posts?postId=${postId}`);
+  const postData = await response.json();
 
-    return {
-        props: {
-            postId
-        }
-    }
-}
+  return {
+    props: {
+      postData,
+    },
+  };
+};
 
 export default PostDetailPage;
