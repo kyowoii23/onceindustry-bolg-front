@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { API_HOST } from "../../common";
+import { marked } from "marked";
+import styled from "@emotion/styled";
 
 const PostAddPage = () => {
   const [title, setTitle] = useState("");
@@ -29,8 +31,8 @@ const PostAddPage = () => {
       }),
     });
 
-    alert('게시글 성공');
-    router.push('/posts');
+    alert("게시글 성공");
+    router.push("/posts");
   };
 
   return (
@@ -41,13 +43,16 @@ const PostAddPage = () => {
       </div>
       <div>
         <label htmlFor="content">본문</label>
-        <textarea
-          id="content"
-          cols="30"
-          rows="10"
-          onChange={contentHandler}
-          defaultValue={content}
-        ></textarea>
+        <Container>
+          <textarea
+            id="content"
+            cols="30"
+            rows="10"
+            onChange={contentHandler}
+            defaultValue={content}
+          ></textarea>
+          <div dangerouslySetInnerHTML={{ __html: marked.parse(content) }} />
+        </Container>
       </div>
       <button>게시글 작성</button>
     </form>
@@ -55,3 +60,9 @@ const PostAddPage = () => {
 };
 
 export default PostAddPage;
+
+const Container = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100vh;
+`;
